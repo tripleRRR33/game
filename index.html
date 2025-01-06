@@ -23,6 +23,7 @@
         #result {
             margin-top: 20px;
             font-weight: bold;
+            transition: all 0.3s ease;
         }
     </style>
 </head>
@@ -44,6 +45,8 @@
             <button onclick="travailler()">Aller travailler</button>
             <button onclick="acheterNourriture()">Acheter de la nourriture</button>
             <button onclick="seReposer()">Se reposer</button>
+            <button onclick="explorer()">Explorer</button>
+            <button onclick="interagir()">Interagir avec un PNJ</button>
         </div>
 
         <div id="result"></div>
@@ -56,6 +59,8 @@
             nourriture: 100,
             moral: 100
         };
+
+        let niveau = 1;
 
         function startGame() {
             personnage.nom = document.getElementById('name').value;
@@ -81,10 +86,10 @@
         }
 
         function travailler() {
-            const gain = Math.floor(Math.random() * 30) + 20;
+            const gain = Math.floor(Math.random() * 40) + 10;
             personnage.argent += gain;
-            personnage.moral -= 10;
-            document.getElementById('result').textContent = `Vous avez travaillé et gagné ${gain} argent. Votre moral a baissé de 10.`;
+            personnage.moral -= 15;
+            document.getElementById('result').textContent = `Vous avez travaillé et gagné ${gain} argent. Votre moral a baissé de 15.`;
             afficherStats();
         }
 
@@ -106,9 +111,34 @@
             document.getElementById('result').textContent = "Vous vous êtes reposé. Votre moral a augmenté de 20, mais vous avez consommé 10 de nourriture.";
             afficherStats();
         }
+
+        function explorer() {
+            const evenement = Math.random();
+            if (evenement < 0.5) {
+                const gain = Math.floor(Math.random() * 50) + 10;
+                personnage.argent += gain;
+                document.getElementById('result').textContent = `Vous avez exploré et trouvé ${gain} argent.`;
+            } else {
+                const perte = Math.floor(Math.random() * 30) + 10;
+                personnage.moral -= perte;
+                document.getElementById('result').textContent = `Vous avez exploré mais vous vous êtes blessé. Votre moral a baissé de ${perte}.`;
+            }
+            afficherStats();
+        }
+
+        function interagir() {
+            const gain = Math.floor(Math.random() * 30) + 10;
+            personnage.moral += gain;
+            document.getElementById('result').textContent = `Vous avez interagi avec un PNJ et votre moral a augmenté de ${gain}.`;
+            afficherStats();
+        }
+
+        function passerNiveauSuivant() {
+            niveau++;
+            personnage.argent += 50;
+            personnage.moral += 10;
+            alert(`Félicitations ! Vous avez atteint le niveau ${niveau}`);
+        }
     </script>
 </body>
 </html>
-
-
-
