@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de gestion textuel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #game-container {
+            margin-bottom: 20px;
+        }
+        #stats {
+            margin-bottom: 20px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenue dans le jeu de gestion textuel</h1>
+
+    <div id="game-container">
+        <label for="name">Quel est le nom de votre personnage ? </label>
+        <input type="text" id="name" placeholder="Nom du personnage">
+        <button onclick="startGame()">Commencer le jeu</button>
+    </div>
+
+    <div id="game">
+        <div id="stats">
+            <p><strong>Argent:</strong> <span id="argent">0</span> | <strong>Nourriture:</strong> <span id="nourriture">0</span> | <strong>Moral:</strong> <span id="moral">0</span></p>
+        </div>
+
+        <div id="actions">
+            <button onclick="travailler()">Aller travailler</button>
+            <button onclick="acheterNourriture()">Acheter de la nourriture</button>
+            <button onclick="seReposer()">Se reposer</button>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let personnage = {
+            nom: "",
+            argent: 100,
+            nourriture: 100,
+            moral: 100
+        };
+
+        function startGame() {
+            personnage.nom = document.getElementById('name').value;
+            if (personnage.nom === "") {
+                alert("Veuillez entrer un nom.");
+                return;
+            }
+
+            document.getElementById('game-container').style.display = "none";
+            document.getElementById('game').style.display = "block";
+            afficherStats();
+        }
+
+        function afficherStats() {
+            document.getElementById('argent').textContent = personnage.argent;
+            document.getElementById('nourriture').textContent = personnage.nourriture;
+            document.getElementById('moral').textContent = personnage.moral;
+
+            if (personnage.argent <= 0 || personnage.nourriture <= 0 || personnage.moral <= 0) {
+                document.getElementById('actions').style.display = "none";
+                document.getElementById('result').textContent = "Vous avez perdu ! Votre personnage est sans argent, sans nourriture ou démoralisé.";
+            }
+        }
+
+        function travailler() {
+            const gain = Math.floor(Math.random() * 30) + 20;
+            personnage.argent += gain;
+            personnage.moral -= 10;
+            document.getElementById('result').textContent = `Vous avez travaillé et gagné ${gain} argent. Votre moral a baissé de 10.`;
+            afficherStats();
+        }
+
+        function acheterNourriture() {
+            const cout = Math.floor(Math.random() * 20) + 10;
+            if (personnage.argent >= cout) {
+                personnage.argent -= cout;
+                personnage.nourriture += 20;
+                document.getElementById('result').textContent = `Vous avez acheté de la nourriture pour ${cout} argent. Vous avez maintenant ${personnage.nourriture} de nourriture.`;
+            } else {
+                document.getElementById('result').textContent = "Vous n'avez pas assez d'argent pour acheter de la nourriture.";
+            }
+            afficherStats();
+        }
+
+        function seReposer() {
+            personnage.moral += 20;
+            personnage.nourriture -= 10;
+            document.getElementById('result').textContent = "Vous vous êtes reposé. Votre moral a augmenté de 20, mais vous avez consommé 10 de nourriture.";
+            afficherStats();
+        }
+    </script>
+</body>
+</html>
+
+
+
